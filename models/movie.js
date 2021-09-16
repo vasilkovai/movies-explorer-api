@@ -59,6 +59,10 @@ const movieSchema = new mongoose.Schema({
     required: true,
     ref: 'user',
   },
+  movieId: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('movie', movieSchema);

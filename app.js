@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const helmet = require('helmet');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
@@ -23,6 +24,20 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+const options = {
+  origin: [
+    'http://localhost:3000',
+    'https://cinemaholic.diploma.nomoredomains.monster',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
+  credentials: true,
+};
+
+app.use('*', cors(options));
 
 app.use(helmet());
 

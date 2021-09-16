@@ -21,6 +21,7 @@ module.exports.createMovie = (req, res, next) => {
     nameRU,
     nameEN,
     thumbnail,
+    movieId,
   } = req.body;
   const owner = req.user._id;
 
@@ -35,6 +36,7 @@ module.exports.createMovie = (req, res, next) => {
     nameRU,
     nameEN,
     thumbnail,
+    movieId,
     owner,
   })
     .then((movie) => res.status(200).send({ data: movie }))
@@ -62,9 +64,9 @@ module.exports.deleteMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Некорректный _id.'));
+        next(new BadRequestError('Некорректный id.'));
       } else if (err.message === 'Error') {
-        next(new NotFoundError('Фильм с указанным _id не найден.'));
+        next(new NotFoundError('Фильм с указанным id не найден.'));
       } else {
         next(err);
       }
