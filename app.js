@@ -5,20 +5,20 @@ const helmet = require('helmet');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const { login, createUser, signOut } = require('./controllers/users');
-const { validateSignIn, validateSignUp } = require('./middlewares/validator');
 const auth = require('./middlewares/auth');
-const usersRouter = require('./routes/users');
-const moviesRouter = require('./routes/movies');
 const NotFoundError = require('./errors/not-found-err');
-const error = require('./middlewares/error');
+const { limiter } = require('./middlewares/limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const error = require('./middlewares/error');
+const ErrorMessage = require('./utils/messages');
+
+const { MONGO_URL } = process.env;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(MONGO_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -45,20 +45,20 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 
-app.post('/signin', validateSignIn, login);
-app.post('/signup', validateSignUp, createUser);
-app.delete('/signout', signOut);
+app.use(require('./routes/index'));
 
 app.use(auth);
 
-app.use('/users', usersRouter);
-app.use('/movies', moviesRouter);
+app.use(require('./routes/movies'));
+app.use(require('./routes/users'));
 
 app.use('/*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не найден.');
+  throw new NotFoundError(ErrorMessage.NOT_FOUND);
 });
 
 app.use(errorLogger);
+
+app.use(limiter);
 
 app.use(errors());
 app.use(error);
