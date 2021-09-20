@@ -2,17 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const { MONGO_URL } = require('./utils/config');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-err');
 const { limiter } = require('./middlewares/limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const error = require('./middlewares/error');
 const ErrorMessage = require('./utils/messages');
-
-const { MONGO_URL } = process.env;
 
 const app = express();
 app.use(express.json());
