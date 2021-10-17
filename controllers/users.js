@@ -102,6 +102,6 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.signOut = (req, res, next) => {
-  res.clearCookie('jwt').send(ErrorMessage.SUCCESS);
+  res.clearCookie('jwt').send({ message: 'Cookies очищены.' });
   next();
 };

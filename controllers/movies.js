@@ -60,7 +60,7 @@ module.exports.deleteMovie = (req, res, next) => {
         return next(new ForbiddenError(ErrorMessage.FORBIDDEN));
       }
       return Movie.deleteOne(movie)
-        .then(() => res.status(200).send(ErrorMessage.SUCCESS));
+        .then(() => res.status(200).send({ message: 'Карточка удалена.' }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
