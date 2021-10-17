@@ -72,6 +72,8 @@ module.exports.updateUser = (req, res, next) => {
         next(new BadRequestError(ErrorMessage.BAD_REQUEST));
       } else if (err.message === 'Error') {
         next(new NotFoundError(ErrorMessage.NOT_FOUND));
+      } else if (err.code === 11000) {
+        next(new ConflictError(ErrorMessage.CONFLICT));
       } else {
         next(err);
       }
@@ -102,6 +104,6 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.signOut = (req, res, next) => {
-  res.clearCookie('jwt').send(ErrorMessage.SUCCESS);
+  res.clearCookie('jwt').send({ message: 'Cookies очищены.' });
   next();
 };
