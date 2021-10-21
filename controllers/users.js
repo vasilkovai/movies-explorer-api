@@ -68,8 +68,8 @@ module.exports.updateUser = (req, res, next) => {
     .orFail(() => new Error('Error'))
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError(ErrorMessage.BAD_REQUEST));
+      if (err.code === 11000) {
+        next(new ConflictError(ErrorMessage.CONFLICT));
       } else if (err.message === 'Error') {
         next(new NotFoundError(ErrorMessage.NOT_FOUND));
       } else {
