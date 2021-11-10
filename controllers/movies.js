@@ -6,7 +6,7 @@ const ErrorMessage = require('../utils/messages');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    .then((movie) => res.status(200).send({ data: movie }))
+    .then((movies) => res.status(200).send({ data: movies }))
     .catch(next);
 };
 
