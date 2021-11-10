@@ -6,7 +6,7 @@ const ErrorMessage = require('../utils/messages');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.status(200).send({ data: movie }))
     .catch(next);
 };
 
@@ -40,7 +40,7 @@ module.exports.createMovie = (req, res, next) => {
     movieId,
     owner,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.status(200).send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(ErrorMessage.BAD_REQUEST));
